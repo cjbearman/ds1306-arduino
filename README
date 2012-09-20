@@ -1,0 +1,29 @@
+Arduino library for Dallas Semiconductor DS1306 real time clock
+
+This library provides support for the DS1306 real time clock for the Arduino platform using the SPI bus.
+
+To use, copy the entire contents of this folder to a new directory sketches/libraries/DS1306, where sketches is your existing Arduino sketches directory. After copying the files, if your Arduino IDE is running, you must restart it.
+
+To use the library, you should find DS1306 available under Sketch -> Import Library in the IDE.
+
+To use, create a new clock object:
+
+	DS1306 clk;
+
+Initialize in your setup() method, providing the digital IO line that you wired the chip enable to, in this case the SS line:
+
+	clk.init(SS);
+
+Initialization will update the chip settings to enable the oscillator and remove write protection.
+
+From here on you can use the various methods available to interact with the chip's clock, alarms and control functions.
+
+Two struct based types are used to represent clock (ds1306time) and alarm (ds1306alarm) data.
+
+Please note that the clock can be used in 24 hour or 12 hour mode. The default mode of operation for the DS1306 library is to use the clock in 24 hour mode. To use the clock in 12 hour mode create the object as "DS1306 clk(false)". This controls the way times are written to the clock. For example, if you use the 12 hour mode, make sure and provide the hours in the "hours12" and "ampm" elements of the ds1306time and ds1306alarm structures. ampm should be either 'A' or 'P'.
+
+When reading values from the clock, the library will automatically detect the mode it's running in and provide both the 24 hour hour (.hours) and the 12 hour hour (.hours12 / .ampm) back in the structure - so you can always use both values in the responses returned from the clock.
+
+When using alarms, you can use the DS1306_ANY constant for the hours, minutes, seconds or day or week to indicate that the alarm should triggeron any matching value for that field.
+
+Example sketches are provided with the library. Check out File->Examples->DS1306->clock.
