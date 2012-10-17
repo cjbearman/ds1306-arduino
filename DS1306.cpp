@@ -287,6 +287,9 @@ void DS1306::set1HzState(bool enabled)
 // Reads len bytes from register in address into data
 void DS1306::read(unsigned char address, unsigned char *data, int len)
 {
+	// Take backup of SPCR
+	uint8_t spcr = SPCR;
+
 	// Enable SPI as master, clock phase falling edge, CPOL idle low, MSB first, max rate, no interrupt
 	SPCR = (1 << SPE) | (1 << MSTR) | (1 << CPHA);
 
@@ -306,6 +309,9 @@ void DS1306::read(unsigned char address, unsigned char *data, int len)
 
 	// Deselect the DS1306 by lowering it's chip enable line
 	digitalWrite(ce, LOW);
+
+	// Restore SPCR
+	SPCR = spcr;
 }
 
 // Read a single byte register
@@ -319,6 +325,9 @@ unsigned char DS1306::read(unsigned char address)
 // Write SPI to register "address" with specified data, bursting for the given length
 void DS1306::write(unsigned char address, const unsigned char *data, int len)
 {
+	// Take backup of SPCR
+	uint8_t spcr = SPCR;
+
 	// Enable SPI as master, clock phase falling edge, CPOL idle low, MSB first, max rate, no interrupt
 	SPCR = (1 << SPE) | (1 << MSTR) | (1 << CPHA);
 
@@ -337,6 +346,9 @@ void DS1306::write(unsigned char address, const unsigned char *data, int len)
 
 	// Deselect the DS1306 by lowering it's chip enable line
 	digitalWrite(ce, LOW);
+
+	// Restore SPCR
+	SPCR = spcr;
 }
 
 // Write a single byte register
