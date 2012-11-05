@@ -300,9 +300,9 @@ void DS1306::read(unsigned char address, unsigned char *data, int len)
 	SPDR = address;
 	waitSPI();
 
-	// Write junk bytes (use AA i.e. 10101010 for easy scope spotting) to finish the read
+	// Write junk byte to finish the read
 	for (int i = 0; i < len; i++) {
-		SPDR = 0xAA;
+		SPDR = 0x00;
 		waitSPI();
 		data[i] = SPDR;
 	}
